@@ -9,6 +9,7 @@ import CodeRepositoryScreen from "./screen/editor/CodeRepositoryScreen.js";
 import BattleScreen from "./screen/battle/BattleScreen.js";
 import WinnerScreen from "./screen/winner/WinnerScreen.js";
 import StartScreen from "./screen/start/StartScreen.js";
+import Profile from './screen/profile/profile.js';
 import ChallengesListScreen from "./screen/challenges/ChallengesListScreen.js";
 import ChallengeEditorScreen from "./screen/challenges/ChallengeEditorScreen.js";
 import ChallengeBattleScreen from "./screen/challenges/ChallengeBattleScreen.js";
@@ -63,131 +64,94 @@ export default class App extends React.Component {
   }
 
   renderContent() {
-    switch (this.state.navi.page) {
-      case "TANK_LIST":
-        return (
-          <StartScreen
-            {...this.state.battle}
-            onStart={(aiDefList, teamMode, rngSeed) => this.controller.openBattle(aiDefList, teamMode, rngSeed)
-            }
-            onError={(msg) => this.showError(msg)}
-            onScriptEdit={(name) => this.controller.openCodeEditor(name, "TANK_LIST")
-            }
-            onTeamModeToggle={(isEnabled) => this.controller.toggleTeamMode(isEnabled)
-            }
-            onTankAssign={(tankName, amount) => this.controller.assignTanksToBattle(tankName, amount)
-            }
-            onTankCreate={() => this.controller.createTank()}
-            onTankDelete={(name) => this.controller.removeTank(name)}
-            aiRepository={this.aiRepository}
-            stateless={this.props.stateless}
-          />
-        );
-      case "BATTLE":
-        return (
-          <BattleScreen
-            {...this.state.battle}
-            renderer={this.props.renderer}
-            speed={this.state.simSpeed}
-            quality={this.state.qualitySettings}
-            onError={(msg) => this.showError(msg)}
-            onFinish={(result) => this.controller.openBattleResults(result)}
-            onExit={() => this.onBattleExit()}
-            stateless={this.props.stateless}
-            aiRepository={this.aiRepository}
-          />
-        );
-      case "BATTLE_RESULT":
-        return (
-          <WinnerScreen
-            {...this.state.battle}
-            onRestart={() => this.controller.openTankList()}
-            onShare={(done) => this.controller.shareBattle(this.state.battle.result.ubd, done)
-            }
-            onEdit={
-              this.state.battle.quickBattleTank
-                ? () => this.controller.openCodeEditor(
-                      this.state.battle.quickBattleTank,
-                      "TANK_LIST"
-                    )
-                : null
-            }
-          />
-        );
-      case "CODE_EDITOR":
-        return (
-          <EditorScreen
-            {...this.state.editor}
-            aiRepository={this.aiRepository}
-            name={this.state.editor.tankName}
-            onClose={() => this.controller.closeCodeEditor()}
-            onTest={() => this.controller.openQuickBattle(this.state.editor.tankName)
-            }
-            onRename={(newName, oldName) => this.controller.renameAiScript(newName, oldName)
-            }
-            onCodeChanged={(code) => this.controller.editCurrentAiScript(code)}
-            onCodeSave={() => this.controller.saveCurrentAiScript()}
-          />
-        );
-      case "CODE_REPOSITORY":
-        return (
-          <CodeRepositoryScreen
-            {...this.state.codeRepository}
-            aiRepository={this.aiRepository}
-            onScriptEdit={(name) => this.controller.openCodeEditor(name, this.state.navi.page)
-            }
-            onTankCreate={() => this.controller.createTank()}
-            onTankDelete={(name) => this.controller.removeTank(name)}
-          />
-        );
-      case "CHALLENGE_LIST":
-        return (
-          <ChallengesListScreen
-            {...this.state.challenges}
-            onChallengeOpen={(id) => this.controller.openChallengeEditor(id, true)
-            }
-          />
-        );
-      case "CHALLENGE_EDITOR":
-        return (
-          <ChallengeEditorScreen
-            {...this.state.currentChallenge}
-            onCodeChanged={(code) => this.controller.saveCurrentChallengeScript(code)
-            }
-            onStart={() => this.controller.openChallengeBattle()}
-            onClose={() => this.controller.openChallenges()}
-          />
-        );
-      case "CHALLENGE_BATTLE":
-        return (
-          <ChallengeBattleScreen
-            {...this.state.currentChallenge}
-            quickBattleTank={null}
-            shareLink={null}
-            renderer={this.props.renderer}
-            speed={this.state.simSpeed}
-            quality={this.state.qualitySettings}
-            onError={(msg) => this.showError(msg)}
-            onFinish={(result) => this.controller.openChallengeResult(result)}
-            onExit={() => this.controller.openChallengeEditor()}
-            stateless={this.props.stateless}
-            aiRepository={this.aiRepository}
-          />
-        );
-      case "CHALLENGE_RESULT":
-        return (
-          <ChallengeResultScreen
-            {...this.state.currentChallenge}
-            onRetry={() => this.controller.openChallengeEditor()}
-            onNextChallenge={() => this.controller.openChallenges()}
-          />
-        );
-      case "LOADING":
-        return (
-          <FullRow>
-            <Loading />
-          </FullRow>
-        );
+    switch(this.state.navi.page) {
+      case 'PROFILE':
+        return <Profile/>;
+      case 'TANK_LIST':
+        return <StartScreen
+          {...this.state.battle}
+          onStart={(aiDefList, teamMode, rngSeed) => this.controller.openBattle(aiDefList, teamMode, rngSeed)}
+          onError={(msg) => this.showError(msg)}
+          onScriptEdit={(name) => this.controller.openCodeEditor(name, 'TANK_LIST')}
+          onTeamModeToggle={(isEnabled) => this.controller.toggleTeamMode(isEnabled)}
+          onTankAssign={(tankName, amount) => this.controller.assignTanksToBattle(tankName, amount)}
+          onTankCreate={() => this.controller.createTank()}
+          onTankDelete={(name) => this.controller.removeTank(name)}
+          aiRepository={this.aiRepository}
+          stateless={this.props.stateless}
+        />;
+      case 'BATTLE':
+        return <BattleScreen
+          {...this.state.battle}
+          renderer={this.props.renderer}
+          speed={this.state.simSpeed}
+          quality={this.state.qualitySettings}
+          onError={(msg) => this.showError(msg)}
+          onFinish={(result) => this.controller.openBattleResults(result)}
+          onExit={() => this.onBattleExit()}
+          stateless={this.props.stateless}
+          aiRepository={this.aiRepository}
+        />;
+      case 'BATTLE_RESULT':
+      return <WinnerScreen
+        {...this.state.battle}
+        onRestart={() => this.controller.openTankList()}
+        onShare={(done) => this.controller.shareBattle(this.state.battle.result.ubd, done)}
+        onEdit={this.state.battle.quickBattleTank ? (() => this.controller.openCodeEditor(this.state.battle.quickBattleTank, 'TANK_LIST')) : null}
+      />;
+      case 'CODE_EDITOR':
+        return <EditorScreen
+          {...this.state.editor}
+          aiRepository={this.aiRepository}
+          name={this.state.editor.tankName}
+          onClose={() => this.controller.closeCodeEditor()}
+          onTest={() => this.controller.openQuickBattle(this.state.editor.tankName)}
+          onRename={(newName, oldName) => this.controller.renameAiScript(newName, oldName)}
+          onCodeChanged={(code) => this.controller.editCurrentAiScript(code)}
+          onCodeSave={() => this.controller.saveCurrentAiScript()}
+        />;
+      case 'CODE_REPOSITORY':
+        return <CodeRepositoryScreen
+          {...this.state.codeRepository}
+          aiRepository={this.aiRepository}
+          onScriptEdit={(name) => this.controller.openCodeEditor(name, this.state.navi.page)}
+          onTankCreate={() => this.controller.createTank()}
+          onTankDelete={(name) => this.controller.removeTank(name)}
+        />;
+      case 'CHALLENGE_LIST':
+        return <ChallengesListScreen
+          {...this.state.challenges}
+          onChallengeOpen={(id) => this.controller.openChallengeEditor(id, true)}
+        />;
+      case 'CHALLENGE_EDITOR':
+        return <ChallengeEditorScreen
+          {...this.state.currentChallenge}
+          onCodeChanged={(code) => this.controller.saveCurrentChallengeScript(code)}
+          onStart={() => this.controller.openChallengeBattle()}
+          onClose={() => this.controller.openChallenges()}
+        />;
+      case 'CHALLENGE_BATTLE':
+        return <ChallengeBattleScreen
+          {...this.state.currentChallenge}
+          quickBattleTank={null}
+          shareLink={null}
+          renderer={this.props.renderer}
+          speed={this.state.simSpeed}
+          quality={this.state.qualitySettings}
+          onError={(msg) => this.showError(msg)}
+          onFinish={(result) => this.controller.openChallengeResult(result)}
+          onExit={() => this.controller.openChallengeEditor()}
+          stateless={this.props.stateless}
+          aiRepository={this.aiRepository}
+        />;
+      case 'CHALLENGE_RESULT':
+        return <ChallengeResultScreen
+          {...this.state.currentChallenge}
+          onRetry={() => this.controller.openChallengeEditor()}
+          onNextChallenge={() => this.controller.openChallenges()}
+        />;
+      case 'LOADING':
+        return <FullRow><Loading /></FullRow>;
       default:
         return <FullRow>Oops! Page not found :/</FullRow>;
     }

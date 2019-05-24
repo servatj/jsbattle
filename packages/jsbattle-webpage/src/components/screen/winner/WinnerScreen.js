@@ -1,7 +1,6 @@
 import Row from "../../common/bootstrap/Row.js";
 import Col from "../../common/bootstrap/Col.js";
 import BattleShareLink from "./BattleShareLink.js";
-import axios from "axios";
 
 let config = {
   headers: {
